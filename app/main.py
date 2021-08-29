@@ -21,6 +21,9 @@ def preview():
                 if len(lines[i]) < len(lines[i+1]):
                     for j in range(len(lines[i]), len(lines[i+1])):
                         lines[i] += lines[i+1][j]
+                elif not i == 0 and len(lines[i]) < len(lines[i-1]):
+                    for j in range(len(lines[i]), len(lines[i-1])):
+                        lines[i] += lines[i-1][j]
             if len(lines[-1]) < len(lines[-2]):
                 for j in range(len(lines[-1]), len(lines[-2])):
                     lines[-1] += lines[-2][j]
