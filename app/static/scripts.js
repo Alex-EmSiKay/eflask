@@ -19,7 +19,7 @@ function update(text) {
         //updateText.innerHTML = text;
         lines = text.replace(/\n/g, "-");
         //console.log(lines);
-        ajax.open("GET", "preview?lines=" + lines.replace(/-$/, "") + "&colour=" + document.getElementById("color_choice").value, true);
+        ajax.open("GET", "preview?lines=" + lines.replace(/-$/, "") + "&colour=" + document.getElementById("color_choice").value + "&reverse=" + document.getElementById("show_reverse").value, true);
     }
 
     ajax.send();

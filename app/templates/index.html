@@ -30,6 +30,7 @@
 
     <div>
         <h1>Knitting Stitch Preview</h1>
+        <label for="color_choice">Colour</label>
         <select id="color_choice" oninput="update(document.getElementById('input_text').value);">
             <option value="Red">Red</option>
             <option value="Orange">Orange</option>
@@ -37,6 +38,11 @@
             <option value="Green">Green</option>
             <option value="Blue">Blue</option>
             <option value="Purple">Purple</option>
+        </select>
+        <label for="show_reverse">Show:</label>
+        <select id="show_reverse" oninput="update(document.getElementById('input_text').value);">
+            <option value="0">Front</option>
+            <option value="1">Back</option>
         </select>
         <div>
             <textarea id="input_text" style="resize:none; width:15%; height:325px"
