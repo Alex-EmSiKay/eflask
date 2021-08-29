@@ -1,4 +1,5 @@
-<svg width="70%" viewBox="0 0 {{1.38 + 310 * maxcols}} {{1.25 + 228 * lines|length}}" style="background-color:{{colour}}" xmlns="http://www.w3.org/2000/svg">
+<svg width="70%" height="700px" viewBox="0 0 {{1.38 + 310 * maxcols}} {{1.25 + 228 * lines|length}}" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="{{1.38 + 310 * maxcols}}" height="{{1.25 + 228 * lines|length}}" fill="{{colour}}" />
 {% for i in range(lines|length) %}
 {% for j in range(lines[i]|length) %}
 {%if lines[i][j] == 'K' %}
