@@ -27,13 +27,22 @@ def preview():
             if len(lines[-1]) < len(lines[-2]):
                 for j in range(len(lines[-1]), len(lines[-2])):
                     lines[-1] += lines[-2][j]
-        print(request.args["reverse"])
+        # print(request.args["reverse"])
+        if (request.args["input"] == "stitch"):
+            for i in range(len(lines)):
+                if i % 2 == 1:
+                    lines[i] = lines[i].replace("K", "O")
+                    lines[i] = lines[i].replace("P", "K")
+                    lines[i] = lines[i].replace("O", "P")
+                else:
+                    lines[i] = lines[i][::-1]
+            lines.reverse()
         if request.args["reverse"] == "1":
             for i in range(len(lines)):
                 lines[i] = lines[i].replace("K", "O")
                 lines[i] = lines[i].replace("P", "K")
                 lines[i] = lines[i].replace("O", "P")
                 lines[i] = lines[i][::-1]
-        return render_template("stitches.svg", lines=lines, maxcols=maxcols, colour=request.args["colour"])
+        return render_template("stitches.svg", lines=lines, maxcols=maxcols, colour="#" + request.args["colour"])
     else:
         return ""
