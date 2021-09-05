@@ -24,6 +24,10 @@
     <title>Knitting Sim</title>
 
     <script src="static/scripts.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", update);
+    </script>
 </head>
 
 <body>
@@ -31,17 +35,27 @@
     <div>
         <h1>Knitting Stitch Preview</h1>
 
-
         <div>
+
             <div style="display: inline-block; vertical-align: top; width:25%;">
                 <div>
-                    <textarea id="input_text" style="resize:none; height:325px; width:100%; vertical-align: top;"
-                        placeholder="Type some 'K's or 'P's..." oninput="update();"></textarea>
+                    <div style="display: inline;"><input type="button" value="Save stich" onclick="save();"></div>
+                    <div style="display: inline;"><a href="stitchlist">List of Stitches</a></div>
+                    <div style="display: inline;">{% if saved %}Stich saved!{% endif %}</div>
+                    <div><input class="form-control" id="title" type="text" placeholder="Stich Title"
+                            value="{% if data %}{{data[0][3]}}{% endif %}"></div>
+                </div>
+                <div>
+                    <textarea class="form-control" id="input_text"
+                        style="resize:none; height:325px; width:100%; vertical-align: top;"
+                        placeholder="Type some 'K's or 'P's..."
+                        oninput="update();">{% if data %}{{data[0][1] | replace("-", "\n")}}{% endif %}</textarea>
                 </div>
                 <div>
                     <div style="display: inline;">
                         <label for="color_choice">Colour</label>
-                        <input type="color" id="color_choice" onchange="update();" value="#e0dfd7">
+                        <input type="color" id="color_choice" onchange="update();"
+                            value="{% if data %}{{'#' + data[0][2]}}{% else %}#e0dfd7{% endif %}">
                     </div>
                     <div style="display: inline;">
                         <label for="show_reverse">Show:</label>
@@ -54,22 +68,22 @@
                 <div>
                     <div><label class="form-check-label" for="stitch">
                             <strong>Input mode:</strong>
-                        </label></div>
-                    <div>
-                        <input class="form-check-input" type="radio" name="inputMode" value="stitch"
-                            onchange="switch_input();" checked>
-                        As if you were knitting the stitches
+                        </label>
                     </div>
                     <div>
                         <input class="form-check-input" type="radio" name="inputMode" value="result"
-                            onchange="switch_input();">
+                            onchange="switch_input();" checked>
                         As if you were looking at the end result
+                    </div>
+                    <div>
+                        <input class="form-check-input" type="radio" name="inputMode" value="stitch"
+                            onchange="switch_input();">
+                        As if you were knitting the stitches
                     </div>
                 </div>
             </div>
             <div style="display: inline-block; vertical-align: top; width: 70%;"><span id="update_text"></span></div>
 
         </div>
-        <div>{{data}}</div>
     </div>
 </body>

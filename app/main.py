@@ -13,9 +13,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def home_view():
-    cur.execute("SELECT * FROM test;")
-    data = cur.fetchone()
-    return render_template("index.html", data=data)
+    return render_template("index.html")
+
+
+@app.route("/load")
+def load():
+    return call(request.args["id"])
 
 
 @app.route("/preview")
@@ -56,3 +59,26 @@ def preview():
         return render_template("stitches.svg", lines=lines, maxcols=maxcols, colour="#" + request.args["colour"])
     else:
         return ""
+
+
+@app.route("/save")
+def save():
+    if len(request.args) > 0:
+        cur.execute("INSERT INTO stitches (code, colour, title) VALUES (%s, %s, %s) RETURNING id;",
+                    (request.args["lines"], request.args["colour"], request.args["title"]))
+        conn.commit()
+        new_id = cur.fetchone()
+        return call(new_id, saved=True)
+
+
+@app.route("/stitchlist")
+def slist():
+    cur.execute("SELECT * FROM stitches;")
+    data = cur.fetchall()
+    return render_template("list.html", data=data)
+
+
+def call(id, saved=False):
+    cur.execute("SELECT * FROM stitches WHERE id = %s;", (id,))
+    call_stitch = cur.fetchall()
+    return render_template("index.html", data=call_stitch, saved=saved)

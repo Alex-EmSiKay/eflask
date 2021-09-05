@@ -62,3 +62,10 @@ function switch_input() {
     in_lines = in_lines.reverse();
     document.getElementById('input_text').value = in_lines.join("\n")
 }
+
+function save() {
+    if (get_input() == "stitch") {
+        switch_input()
+    }
+    window.location.replace("save?lines=" + document.getElementById("input_text").value.replace(/\n/g, "-") + "&colour=" + document.getElementById("color_choice").value.replace("#", "") + "&title=" + document.getElementById("title").value);
+}
