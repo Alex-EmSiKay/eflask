@@ -1,11 +1,21 @@
 from flask import Flask, render_template, request
+import os
+import psycopg2
+
+DATABASE_URL = os.environ['DATABASE_URL']
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='allow')
+
+cur = conn.cursor()
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def home_view():
-    return render_template("index.html")
+    cur.execute("SELECT * FROM test;")
+    data = cur.fetchone()
+    return render_template("index.html", data=data)
 
 
 @app.route("/preview")
