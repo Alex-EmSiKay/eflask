@@ -2,3 +2,28 @@ div
 {
     padding: 10px;
 }
+
+.ib
+{
+    display: inline-block;
+    padding: 20px;
+    vertical-align: middle;
+}
+
+.section
+{
+    border-bottom: 2px solid;
+}
+
+input[type=number]
+{
+    width: 3em
+}
+
+
+.links tr td
+{
+    padding: 0px 10px 0px;
+    border-left: 2px solid;
+    border-right: 2px solid;
+}

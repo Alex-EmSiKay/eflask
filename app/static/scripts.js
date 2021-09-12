@@ -40,13 +40,13 @@ function get_input() {
 
 function switch_input() {
     var in_text = document.getElementById('input_text').value;
-    var in_lines = in_text.split("\n");
+    var in_lines = in_text.trim().split("\n");
     var dir = 0;
     var inp = get_input();
-    if (inp == "result") {
+    if (inp == "result" && in_lines.length % 2 == 0) {
         dir = 1;
     }
-    //console.log(dir);
+    console.log(in_lines.length + dir);
     for (var i = 0; i < in_lines.length; i++) {
         if (i % 2 == (in_lines.length + dir) % 2) {
             in_lines[i] = in_lines[i].replace(/K/g, "O");
@@ -64,6 +64,14 @@ function switch_input() {
 }
 
 function save() {
+    if (document.getElementById("title").value == "") {
+        alert("Stitch Title must not be blank!");
+        return
+    }
+    if (document.getElementById("input_text").value == "") {
+        alert("There needs to be some stiches added first!");
+        return
+    }
     if (get_input() == "stitch") {
         switch_input()
     }
