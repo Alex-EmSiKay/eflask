@@ -11,15 +11,17 @@ Knitting Stitch List
             <th scope="col">Title</th>
             <th scope="col">Code</th>
             <th scope="col">Colour</th>
+            <th scope="col">Thumbnail</th>
         </tr>
     </thead>
     <tbody>
 
-        {% for datum in data %}
+        {% for i in range( data | length) %}
         <tr>
-            <td><a href="load?id={{datum[0]}}"><strong>{{ datum[3] }}</strong></a></td>
-            <td>{{ datum[1] }}</td>
-            <td>{{ "#" + datum[2] }}</td>
+            <td><a href="load?id={{data[i][0]}}"><strong>{{ data[i][3] }}</strong></a></td>
+            <td>{{ data[i][1] }}</td>
+            <td>{{ "#" + data[i][2] }}</td>
+            <td><img src="data:image/png;base64, {{ thumbnails[i] }}" /></td>
         </tr>
         {%endfor %}
 

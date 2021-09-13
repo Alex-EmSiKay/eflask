@@ -111,4 +111,6 @@
 {% endfor %}
 {% endfor %}
 </svg>
+{% if stitch_string %}
 <input type="hidden" id="rendered" value="{{stitch_string}}">
+{% endif %}
