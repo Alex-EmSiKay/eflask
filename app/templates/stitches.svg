@@ -111,3 +111,4 @@
 {% endfor %}
 {% endfor %}
 </svg>
+<input type="hidden" id="rendered" value="{{stitch_string}}">

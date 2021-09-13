@@ -3,6 +3,9 @@
 Knitting Stitch Preview
 {% endblock %}
 {% block main %}
+<script>
+    document.addEventListener("DOMContentLoaded", update);
+</script>
 <div class="section">
     <div class="ib">
         <div><input class="form-control" id="title" type="text" placeholder="Stitch Title"
@@ -18,12 +21,14 @@ Knitting Stitch Preview
         </div>
         <div>
             <input class="form-check-input" type="radio" name="inputMode" value="result" onchange="switch_input();"
-                checked>
-            As if you were looking at the end result
+                checked>As if you were looking at the end result
         </div>
         <div>
             <input class="form-check-input" type="radio" name="inputMode" value="stitch" onchange="switch_input();">
             As if you were knitting the stitches
+        </div>
+        <div class="tooltip">Hover over me
+            <span class="tooltiptext">Tooltip text</span>
         </div>
     </div>
     <div class="ib">
@@ -35,8 +40,8 @@ Knitting Stitch Preview
         <div style="display: inline;">
             <label for="show_reverse">Show:</label>
             <select id="show_reverse" oninput="update();">
-                <option value="0">Front</option>
-                <option value="1">Back</option>
+                <option value="0">Right side</option>
+                <option value="1">Wrong side</option>
             </select>
         </div>
     </div>
@@ -47,9 +52,20 @@ Knitting Stitch Preview
             style="resize:none; height:325px; width:100%; vertical-align: top; font-family: monospace; font-size: 30pt;"
             placeholder="Type some 'K's or 'P's..."
             oninput="update();">{% if data %}{{data[0][1] | replace("-", "\n")}}{% endif %}</textarea>
+        <p id="explain">The sequence of K's and P's correspond left-to-right, top-to-bottom with the visible grid of
+            stitches on the
+            final result</p>
     </div>
     <div style="display: inline-block; vertical-align: top; width: 70%;"><span id="update_text"></span>
     </div>
 </div>
+</div>
+<div class="section">
+    <div class="ib" style="vertical-align: top;">
+        <button onclick="copy_rendered();">Copy Pattern</button>
+    </div>
+    <div class="ib" style="vertical-align: top;"><span style="font-family: serif; font-size: 20pt;" id="cond"></span>
+    </div>
+
 </div>
 {% endblock %}

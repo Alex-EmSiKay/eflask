@@ -41,22 +41,21 @@ def preview():
                 for j in range(len(lines[-1]), len(lines[-2])):
                     lines[-1] += lines[-2][j]
         # print(request.args["reverse"])
+        by_stitch_lines = lines.copy()
         if (request.args["input"] == "stitch"):
-            for i in range(len(lines)):
-                if i % 2 == 1:
-                    lines[i] = lines[i].replace("K", "O")
-                    lines[i] = lines[i].replace("P", "K")
-                    lines[i] = lines[i].replace("O", "P")
-                else:
-                    lines[i] = lines[i][::-1]
+            switch_input(lines)
             lines.reverse()
+        else:
+            by_stitch_lines.reverse()
+            switch_input(by_stitch_lines)
+
         if request.args["reverse"] == "1":
             for i in range(len(lines)):
                 lines[i] = lines[i].replace("K", "O")
                 lines[i] = lines[i].replace("P", "K")
                 lines[i] = lines[i].replace("O", "P")
                 lines[i] = lines[i][::-1]
-        return render_template("stitches.svg", lines=lines, maxcols=maxcols, colour="#" + request.args["colour"])
+        return render_template("stitches.svg", lines=lines, maxcols=maxcols, colour="#" + request.args["colour"], stitch_string="-".join(by_stitch_lines))
     else:
         return ""
 
@@ -82,3 +81,13 @@ def call(id, saved=False):
     cur.execute("SELECT * FROM stitches WHERE id = %s;", (id,))
     call_stitch = cur.fetchall()
     return render_template("index.html", data=call_stitch, saved=saved)
+
+
+def switch_input(l):
+    for i in range(len(l)):
+        if i % 2 == 1:
+            l[i] = l[i].replace("K", "O")
+            l[i] = l[i].replace("P", "K")
+            l[i] = l[i].replace("O", "P")
+        else:
+            l[i] = l[i][::-1]
