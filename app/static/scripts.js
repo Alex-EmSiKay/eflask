@@ -143,7 +143,7 @@ function arrayEquals(a, b) {
 
 function render(l) {
     var s = "";
-    console.log("this is the input array" + l.toString())
+    //console.log("this is the input array" + l.toString())
     for (var i = 0; i < l.length; i++) {
         if (l[i].length < 2) {
             return render(l[i])
@@ -151,10 +151,10 @@ function render(l) {
         if (Array.isArray(l[i][0])) {
             return render(l[i])
         }
-        console.log("this is the l[i]: " + l[i].toString())
-        console.log("this is l[i][0]: " + l[i][0].toString())
-        console.log("this is l[i][1]: " + l[i][1].toString())
-        console.log("this is l[i][2]: " + l[i][2].toString())
+        //console.log("this is the l[i]: " + l[i].toString())
+        //console.log("this is l[i][0]: " + l[i][0].toString())
+        //console.log("this is l[i][1]: " + l[i][1].toString())
+        //console.log("this is l[i][2]: " + l[i][2].toString())
         //console.log(s);
         //console.log(l[i][1][0])
         if (l[i][1][0] == "K" || l[i][1][0] == "P") {
