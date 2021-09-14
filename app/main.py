@@ -3,11 +3,10 @@ import os
 import psycopg2
 import base64
 import pyvips
-import sys
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+conn = psycopg2.connect(DATABASE_URL, sslmode='allow')
 
 cur = conn.cursor()
 
