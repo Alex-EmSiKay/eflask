@@ -21,6 +21,7 @@ Knitting Stitch List
             <td><a href="load?id={{data[i][0]}}"><strong>{{ data[i][3] }}</strong></a></td>
             <td>{{ data[i][1] }}</td>
             <td>{{ "#" + data[i][2] }}</td>
+            <!-- takes the encoded bin data and renders it as an image-->
             <td><img src="data:image/png;base64, {{ thumbnails[i] }}" /></td>
         </tr>
         {%endfor %}

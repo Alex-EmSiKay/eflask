@@ -1,14 +1,18 @@
 <svg style="max-height: 750px;" viewBox="0 0 {{27 + 15 + 4 + 340 * maxcols + (356-340)}} {{6 + 243 + 225 * lines|length + (247-225)}}" fill="none" xmlns="http://www.w3.org/2000/svg">
-<!--rect width="{{ 340 * maxcols}}" height="{{ 225 * lines|length}}" fill="none" -->
+
+<!-- we first encode all the fills, to make sure they appear below the strokes-->
+<!-- puts in the top loops-->
 {% for k in range(maxcols) %}
 <svg x="{{18 + k * 340}}" y="0" width="350" height="243" viewBox="0 0 350 243" fill="none" >
 <path d="M20.8593 241C10.8184 215 6.56305 154.379 5.4644 112.306C5.57858 91.9586 1.39087 34.6074 16.1574 18.9479C30.9239 3.28831 133.699 5.06036 175.027 5.06036V122C140.148 121 154.34 186.5 162.053 226.343L20.8593 241Z" fill="{{colour}}"/>
 <path d="M329.141 241C339.182 215 343.437 154.379 344.536 112.306C344.421 91.9586 348.609 34.6074 333.843 18.9479C319.076 3.28831 216.301 5.06036 174.973 5.06036V122C209.852 121 195.66 186.5 187.947 226.343L329.141 241Z" fill="{{colour}}"/>
 </svg>
 {% endfor %}
+<!-- does the rest of the grid -->
 {% for i in range(lines|length) %}
 {% for j in range(lines[i]|length) %}
 {% if lines[i][j] == 'K' %}
+<!-- adds edges to the knits if they are in the first or last column-->
 {% if j == 0 %}
 <svg x="0" y="{{i * 225 + 219 + 99}}" width="31" height="142" viewBox="0 0 31 142" fill="none" >
 <path d="M22.5001 132C-7.16346 132 9.7435 10.5 19.5002 5.5H27.0001L22.5001 132Z" fill="{{colour}}"/>
@@ -21,6 +25,7 @@
 </g>
 </svg>
 {% endif %}
+<!-- renders a knit in the grid-->
 <svg x="{{15 + j * 340}}" y="{{6 + i * 225 + 218.5}}" width="357" height="235" viewBox="0 0 357 235" fill="none">
 <path d="M8.47267 112.306C8.58888 91.9586 4.32659 34.6074 19.3561 18.9479C34.3857 3.28831 138.992 5.06036 181.056 5.06036V117.653L99.9694 113.261L8.47267 112.306Z" fill="{{colour}}"/>
 <path d="M177.584 122.694C177.468 143.041 181.73 200.393 166.7 216.052C151.671 231.712 47.0649 229.94 5.00099 229.94L5.001 117.347L86.0872 121.739L177.584 122.694Z" fill="{{colour}}"/>
@@ -28,12 +33,14 @@
 <path d="M178.529 122.694C178.645 143.041 174.383 200.393 189.413 216.052C204.442 231.712 309.048 229.94 351.112 229.94L351.112 117.347L270.026 121.739L178.529 122.694Z" fill="{{colour}}"/>
 </svg>
 {% else %}
+<!--if a purl is on the last line, give it an edge -->
 {% if i == lines|length -1 %}
 <svg x="{{22 + j * 340}}" y="{{i * 225 + 219 + 227.5}}" width="342" height="38" viewBox="0 0 344 38" fill="none" >
 <path d="M131.184 31.8192L172 31.8192L172 17.0001C159.5 17.0001 160.5 6.00012 158.5 2.50012L15.8563 15.0001C19 35.0001 60 31.8191 72 31.8192C84.9515 31.8193 106.579 31.8192 131.184 31.8192Z" fill="{{colour}}"/>
 <path d="M212.816 31.8192L172 31.8192L172 17.0001C184.5 17.0001 183.5 6.00012 185.5 2.50012L328.144 15.0001C325 35.0001 284 31.8191 272 31.8192C259.048 31.8193 237.421 31.8192 212.816 31.8192Z" fill="{{colour}}"/>
 </svg>
 {% endif %}
+<!-- renders a purl in the grid-->
 <svg x="{{15 + 4 + j * 340}}" y="{{i * 225 + 218.5}}" width="348" height="247" viewBox="0 0 348 247" fill="none" >
 <path d="M20.1889 244.691C-6.80295 129.744 16.9495 36.5261 16.1416 11C23.5393 41.9244 90.0039 130.747 90.0039 130.747L126.429 176.134L162.854 238.422L20.1889 244.691Z" fill="{{colour}}"/>
 <path d="M157.827 2.30873C184.819 117.256 161.066 210.474 161.874 236C154.476 205.076 88.0118 116.253 88.0118 116.253L51.5866 70.8657L15.1614 8.5782L157.827 2.30873Z" fill="{{colour}}"/>
@@ -43,6 +50,7 @@
 {% endif %}
 {% endfor %}
 {% endfor %}
+<!-- does the some as above but with the strokes-->
 {% for k in range(maxcols) %}
 <svg x="{{18 + k * 340}}" y="0" width="350" height="243" viewBox="0 0 350 243" fill="none">
 <path d="M18.755 233.329L4.92789 233.329V171.207L18.755 233.329Z" fill="black" fill-opacity="0.8"/>
