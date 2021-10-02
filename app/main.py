@@ -8,8 +8,6 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='allow')
 
-cur = conn.cursor()
-
 app = Flask(__name__)
 
 
@@ -31,7 +29,7 @@ def load():
 
 @app.route("/preview")
 def preview():
-    if len(request.args) > 0:
+    if len(request.args):
         fixed_lines = fix_lines(request.args)
         return render_template("stitches.svg", lines=fixed_lines[0], maxcols=fixed_lines[1], colour="#" + request.args["colour"], stitch_string="-".join(fixed_lines[2]))
     else:
@@ -40,7 +38,7 @@ def preview():
 
 @app.route("/save")
 def save():
-    if len(request.args) > 0:
+    if len(request.args):
         fixed_lines = fix_lines(request.args)
         # Gets the code for the svg in a buffer
         svg_image = render_template(
@@ -50,8 +48,9 @@ def save():
             bytes(svg_image, 'utf-8'), 200)
         # converting to png and saving to a buffer
         png_buffer = png_image.pngsave_buffer()
-        cur.execute("INSERT INTO stitches (code, colour, title, thumbnail) VALUES (%s, %s, %s, %s) RETURNING id;",
-                    (request.args["lines"], request.args["colour"], request.args["title"], png_buffer))
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO stitches (code, colour, title, thumbnail) VALUES (%s, %s, %s, %s) RETURNING id;",
+                        (request.args["lines"], request.args["colour"], request.args["title"], png_buffer))
         conn.commit()
         new_id = cur.fetchone()
         return call(new_id, saved=True)
@@ -59,8 +58,9 @@ def save():
 
 @app.route("/stitchlist")
 def slist():
-    cur.execute("SELECT * FROM stitches;")
-    data = cur.fetchall()
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM stitches;")
+        data = cur.fetchall()
     thumbnails = [base64.b64encode(
         bytes(datum[4])).decode("utf-8") for datum in data]
     return render_template("list.html", data=data, thumbnails=thumbnails)
@@ -69,21 +69,24 @@ def slist():
 
 
 def call(id, saved=False):
-    cur.execute("SELECT * FROM stitches WHERE id = %s;", (id,))
-    call_stitch = cur.fetchall()
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM stitches WHERE id = %s;", (id,))
+        call_stitch = cur.fetchall()
     return render_template("index.html", data=call_stitch, saved=saved)
 
 # 'swaps the Ks and Ps in odd lines'
 
 
 def switch_input(l):
-    for i in range(len(l)):
-        if i % 2 == 1:
-            l[i] = l[i].replace("K", "O")
-            l[i] = l[i].replace("P", "K")
-            l[i] = l[i].replace("O", "P")
-        else:
-            l[i] = l[i][::-1]
+    transform = str.maketrans("KP", "PK")
+    return [(v.translate(transform) if i % 2 == 1 else v[::-1]) for i, v in enumerate(l)]
+    # for i in enumerate(l):
+    #     if i % 2 == 1:
+    #         l[i] = l[i].replace("K", "O")
+    #         l[i] = l[i].replace("P", "K")
+    #         l[i] = l[i].replace("O", "P")
+    #     else:
+    #         l[i] = l[i][::-1]
 
 # Cleans up and transforms the code depending on the input mode
 
@@ -110,16 +113,17 @@ def fix_lines(arg):
     by_stitch_lines = lines.copy()
     if "input" in arg:
         if (arg["input"] == "stitch"):
-            switch_input(lines)
+            lines = switch_input(lines)
             lines.reverse()
         else:
             by_stitch_lines.reverse()
-            switch_input(by_stitch_lines)
+            by_stitch_lines = switch_input(by_stitch_lines)
     if "reverse" in arg:
         if arg["reverse"] == "1":
-            for i in range(len(lines)):
-                lines[i] = lines[i].replace("K", "O")
-                lines[i] = lines[i].replace("P", "K")
-                lines[i] = lines[i].replace("O", "P")
-                lines[i] = lines[i][::-1]
+            tform = str.maketrans("KP", "PK")
+            lines = [v[::-1].translate(tform) for v in lines]
+            # lines[i] = lines[i].replace("K", "O")
+            # lines[i] = lines[i].replace("P", "K")
+            # lines[i] = lines[i].replace("O", "P")
+            # lines[i] = lines[i][::-1]
     return [lines, maxcols, by_stitch_lines]
